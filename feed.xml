@@ -1,0 +1,2292 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+
+<feed xmlns="http://www.w3.org/2005/Atom" >
+  <generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator>
+  <link href="https://wildfly.org//feed.xml" rel="self" type="application/atom+xml" />
+  <link href="https://wildfly.org//" rel="alternate" type="text/html" />
+  <updated>2020-11-13T05:34:05+00:00</updated>
+  <id>https://wildfly.org/</id>
+
+  
+  
+    <title type="html">WildFly</title>
+  
+
+  
+    <entry>
+      <title type="html">WildFly 22 Alpha1 is released!</title>
+      <link href="https://wildfly.org//news/2020/11/12/Jakarta-EE-9-with-WildFly-Preview/" rel="alternate" type="text/html" title="WildFly 22 Alpha1 is released!" />
+      <published>2020-11-12T00:00:00+00:00</published>
+      <updated>2020-11-12T00:00:00+00:00</updated>
+      <id>https://wildfly.org//news/2020/11/12/Jakarta-EE-9-with-WildFly-Preview</id>
+      
+      
+        <content type="html" xml:base="https://wildfly.org//news/2020/11/12/Jakarta-EE-9-with-WildFly-Preview/">&lt;div id=&quot;preamble&quot;&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;I&amp;#8217;m pleased to announce that the WildFly 22 Alpha1 zips are now available &lt;a href=&quot;https://wildfly.org/downloads&quot;&gt;for download&lt;/a&gt;. This includes the first release of a new 'WildFly Preview' distribution of WildFly, which we&amp;#8217;re using to give our community a tech preview look at things we see coming down the road in our main WildFly distribution. Right now this is mostly about what we are doing with Jakarta EE 9, although there are some other differences that I&amp;#8217;ll get into below.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;We don&amp;#8217;t normally do alpha releases of WildFly, but we&amp;#8217;re overdue to give our community a look at what we&amp;#8217;re doing on EE 9. I believe what we have can be a useful milestone for people wanting an early look at where we&amp;#8217;re going, so here it is!&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;wildfly-preview-and-jakarta-ee-9&quot;&gt;WildFly Preview and Jakarta EE 9&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;It&amp;#8217;s exciting to see the great progress the Jakarta EE community has made on the way to the upcoming GA release of Jakarta EE 9!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;As I discussed in my &lt;a href=&quot;https://www.wildfly.org/news/2020/06/23/WildFly-and-Jakarta-EE-9/&quot;&gt;June post on the plans for WildFly and EE 9&lt;/a&gt;, the EE 9 release is primarily about implementing the necessary change in the Jakarta EE APIs from the javax.* package namespace to the jakarta.* namespace. This is a big change that is going to take a while to percolate through the EE ecosystem, e.g. for the many projects that compile against the EE APIs to provide versions that use jakarta.*. While this happens we want to continue to deliver new features and fixes to our community, so the primary WildFly distribution will continue to provide the EE 8 APIs.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;But, we want the community to begin to look at EE 9, so we decided to produce a new distribution of WildFly, which we&amp;#8217;re calling WildFly Preview. With WildFly 22 Alpha1 we&amp;#8217;re providing the first download of WildFly Preview.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect2&quot;&gt;
+&lt;h3 id=&quot;ee-9-via-bytecode-transformation-and-the-wildfly-preview-galleon-feature-pack&quot;&gt;EE 9 Via Bytecode Transformation and the 'wildfly-preview' Galleon Feature Pack&lt;/h3&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The large majority of the libraries included in WildFly Preview that were compiled against EE APIs were based on the javax.* EE 8 APIs. This includes the libraries produced from WildFly&amp;#8217;s own code base and by WildFly Core.  But the EE APIs libraries available in the WildFly Preview runtime all use the jakarta.* packages. How can this work?&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The solution we&amp;#8217;ve come up with for this is to provide a new 'wildfly-preview' Galleon feature pack, in addition to the standard 'wildfly' feature pack. (Recall that any WildFly server installation, including the ones that are zipped up and made available for download here, is produced by telling Galleon tooling to provision from a feature pack.) The 'wildfly-preview' feature pack differs from the standard 'wildfly' one in a number of ways, with the key ones relevant to EE 9 being:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Where suitable EE 9 spec API jars were available from Eclipse, those were used instead of the EE 8 spec jars used in standard WildFly.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Where suitable 'native' EE 9 implementation libraries (i.e. ones compiled against jakarta.*) were available, those were used. This includes Weld, Hibernate Validator, Mojarra, Yasson, Jakarta EL and Jakarta JSON.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Any libraries that were using EE 8 APIs were detected and instructions were incorporated in the feature pack telling Galleon to do &lt;em&gt;byte code transformation of that library whenever it provisions a server using the feature pack&lt;/em&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The last item is the key point. When Galleon provisions a 'wildfly-preview' server by pulling jars down from maven, it knows that some artifacts were compiled against EE 8 javax.* packages. So it bytecode transforms those jars to alter references to EE 8 packages in the class file constant tables to change from javax.* to jakarta.*. The transformation goes beyond simple package renames; a number of other known differences between EE 8 and EE 9 are handled. We owe a great deal of thanks to B.J. Hargrave and the community behind the &lt;a href=&quot;https://projects.eclipse.org/projects/technology.transformer&quot;&gt;Eclipse Transformer&lt;/a&gt; project for their work on the underlying transformation tool.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;You can use the Galleon CLI tool to provision a server from the wildfly-preview feature pack yourself:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;galleon.sh install wildfly-preview:current#22.0.0.Alpha1 --dir=my-wildfly-server&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Note the use of 'wildfly-preview' instead of 'wildfly'. Because this release is an alpha, Galleon won&amp;#8217;t try to install it by default if you don&amp;#8217;t give it explicit instructions to do so. So I include the '#22.0.0.Alpha1' in the feature pack location string. Another way to do this is to explicitly state that an alpha feature pack frequency is acceptable:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;galleon.sh install wildfly-preview:current/alpha --dir=my-wildfly-server&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;As Galleon provisions the server it will log quite a bit of information about the transformation work it is doing.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Please note that the transformation adds a fair bit to the amount of time it takes to provision the server.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect2&quot;&gt;
+&lt;h3 id=&quot;wildfly-preview-support-for-ee-8-deployments&quot;&gt;WildFly Preview Support for EE 8 Deployments&lt;/h3&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The APIs that WildFly Preview exposes to deployments are the EE 9 APIs, so all the classes and interfaces are in the jakarta.* packages. But what if you want to run an existing EE 8 application on WildFly Preview? We expect that to be a very important use case in the long run. Eventually the jakarta.* APIs will be what&amp;#8217;s provided by the standard WildFly distribution, but many WildFly users will have existing applications that they&amp;#8217;ll want to continue to run unchanged. So we wanted to make sure from the very beginning that that works.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;What we&amp;#8217;ve done is we&amp;#8217;ve added to the server&amp;#8217;s handling of &lt;em&gt;managed&lt;/em&gt; deployments the same basic transformation that&amp;#8217;s applied to the server artifacts when provisioning. A managed deployment is one where a management client (the CLI, HAL console or the deployment scanner) presents deployment content to the server and the server makes a copy of it in its internal deployment content repository. The content that gets installed into the runtime is that internal copy.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;A WildFly Preview server, when it reads in deployment content to store in the content repository, will transform any EE 8 content into EE 9.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;In the long run I feel it&amp;#8217;s better for users if they either convert their application source to EE 9 APIs, or use build-time tooling that we and the rest of the Jakarta community will work to provide to do transformation at build time.  But some applications just can&amp;#8217;t be changed, so the server-side solution we&amp;#8217;re using can handle those cases.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Confession: beyond wanting to make sure EE 8 deployments can run for users, we need it to work for ourselves. The WildFly testsuite is full of hundreds of EE 8 deployments. We want to be able to run those tests aganst WildFly Preview, so we needed to make this work.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;other-differences-in-wildfly-preview&quot;&gt;Other Differences in WildFly Preview&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Besides exposing EE 9 APIs, we want to use WildFly Preview to help get community exposure for other changes we plan to make in the server. Here are the key ones:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;The legacy security subsytem is not supported. The standard configurations are all based on Elytron security. Our goal is to remove the underlying Picketbox libraries altogether in the next few months. This is an important prerequisite for supporting JDK 14 or later.  When we do this, security vault support will be removed as well. Elytron credential stores should be used.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;The security vault tool (used to manipulate vault contents) is not provided.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;The standard configuration files do not configure an embedded messaging broker. Instead they configure the 'messaging-activemq' subsystem to provide connections to a remote ActiveMQ Artemis broker. (It&amp;#8217;s a task for the user to run such a broker or to update the config to integrate with a different broker.) We want WildFly out-of-the-box to be more of a cloud native appserver and having an embedded messaging broker in the default configuration is not cloud native. A WildFly container in the cloud running an embedded broker is not scalable, as multiple broker instances need separate configuration to act as a primary or backup. An embedded messaging broker also has more advanced persistent storage requirements than a server primarily dedicated to handling HTTP requests would have. Note however that running an embedded broker is still supported. We&amp;#8217;ve added an example 'standalone-activemq-embedded.xml' configuration showing its use to the $WILDFLY_HOME/docs/examples/configs folder.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;The Picketlink extension is removed.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;The JSR-77 extension is removed.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;The extensions providing the legacy subsystems 'cmp', 'config-admin', 'jacorb', 'jaxr', 'messaging' (HornetQ based), and 'web' (not 'undertow') are removed. These were only used for domain mode to allow a Domain Controller to control hosts running much earlier WildFly versions where servers using these subsystems were supported.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;known-issues&quot;&gt;Known Issues&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Please understand that WildFly Preview is a true alpha, so you may find issues if you try it for your use case. If you do, please report them on the &lt;a href=&quot;https://issues.redhat.com/projects/WFLY/summary&quot;&gt;WildFly JIRA&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;There are a number of known issues:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;WildFly Preview does not pass the EE 9 platform TCK. We currently have 193 failures (out of over 40,000 tests). These are mostly in the webservices area.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;The bootable jar feature we&amp;#8217;ve been rolling out over the last few WildFly releases does not support WildFly Preview yet.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;JBoss Modules modules installed by the user are not transformed. If such a module uses EE 8 APIs it will not work.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Deployment overlays are not transformed. So any overlay artifact that uses EE 8 APIs will not work.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Unmanaged deployments that use EE 8 APIs will not work. We transform managed deployments when we copy the deployment content into the internal content repo. For unmanaged deployments we use the original content file(s) the user provides, and WildFly won&amp;#8217;t modify those files as we don&amp;#8217;t consider them as being 'owned' by the server.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Managed exploded deployments likely won&amp;#8217;t work.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Applications incorporating the EE 9 variant of the &lt;a href=&quot;https://jakarta.ee/xml/ns/jaxws/wsdl_customizationschema_3_0.xsd&quot;&gt;Jakarta XML Web Services WSDL customization descriptor&lt;/a&gt; will not work. The EE 8 variant, which should be semantically equivalent, should work.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Alternate JPA and JSF providers that you can install with standard WildFly are not supported.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Note that the current lack of support for parsing EE 9 WSDL customization descriptors means our test coverage of EE 9 Jakarta XML Web Services applications is less robust than it is for most other EE technologies.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;looking-forward&quot;&gt;Looking Forward&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The near term priorities for WildFly Preview are to continue to progress on the EE 9 TCK and to get bootable jar support working. We&amp;#8217;ll strive to continue to improve the speed of the transformation process. And as more 'native' EE 9 variants of the libraries we use become available we&amp;#8217;ll update WildFly Preview to incorporate those.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Later on we&amp;#8217;ll work to handle transforming deployment overlays and perhaps to handle JBoss Modules modules added by the user.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;jira-release-notes&quot;&gt;Jira Release Notes&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The full list of issues resolved is available &lt;a href=&quot;https://issues.redhat.com/secure/ReleaseNote.jspa?projectId=12313721&amp;amp;version=12350653&quot;&gt;here&lt;/a&gt;. Issues resolved in the WildFly Core 14 Beta1 release included with WildFly 22 are available &lt;a href=&quot;https://issues.redhat.com/secure/ReleaseNote.jspa?projectId=12315422&amp;amp;version=12346847&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;enjoy&quot;&gt;Enjoy!&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;We hope you enjoy WildFly 22 Alpha1.  Please give it a try, particularly WildFly Preview, and &lt;a href=&quot;https://groups.google.com/forum/#!forum/wildfly&quot;&gt;give us your feedback&lt;/a&gt;. But most important, please stay safe and well!&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</content>
+      
+
+      
+      
+      
+      
+      
+
+      <author>
+        <name>Brian Stansberry</name>
+        
+        
+      </author>
+
+      
+        
+      
+
+      
+        <category term="announcement" />
+      
+        <category term="release" />
+      
+        <category term="jakarta" />
+      
+
+      
+        <summary type="html">I&amp;#8217;m pleased to announce that the WildFly 22 Alpha1 zips are now available for download. This includes the first release of a new 'WildFly Preview' distribution of WildFly, which we&amp;#8217;re using to give our community a tech preview look at things we see coming down the road in our main WildFly distribution. Right now this is mostly about what we are doing with Jakarta EE 9, although there are some other differences that I&amp;#8217;ll get into below.</summary>
+      
+
+      
+      
+    </entry>
+  
+    <entry>
+      <title type="html">WildFly MicroProfile Reactive Specifications Feature Pack 1.0.0.Final Released!</title>
+      <link href="https://wildfly.org//news/2020/11/05/WildFly-MicroProfile-Reactive-specifications-feature-pack-1.0/" rel="alternate" type="text/html" title="WildFly MicroProfile Reactive Specifications Feature Pack 1.0.0.Final Released!" />
+      <published>2020-11-05T12:00:00+00:00</published>
+      <updated>2020-11-05T12:00:00+00:00</updated>
+      <id>https://wildfly.org//news/2020/11/05/WildFly-MicroProfile-Reactive-specifications-feature-pack%201.0</id>
+      
+      
+        <content type="html" xml:base="https://wildfly.org//news/2020/11/05/WildFly-MicroProfile-Reactive-specifications-feature-pack-1.0/">&lt;div id=&quot;preamble&quot;&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;I am happy to announce the 1.0.0.Final release of the MicroProfile Reactive specifications feature pack for WildFly. It is tested against both WildFly 20 and 21.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The main changes since 1.0.0.Beta1 are essentially upgrades to the latest SmallRye implementations of all the MicroProfile Reactive specifications, and fixing problems related to memory leaks and redeployments. The MicroProfile Reactive specifications are:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/eclipse/microprofile-reactive-messaging/releases&quot;&gt;MicroProfile Reactive Messaging 1.0&lt;/a&gt; - this is a framework for building event-driven, data streaming and event sourcing applications using CDI. The streams, or channels, can be backed by a variety of messaging technologies. We currently ship connectors for: Apache Kafka, AMQP and MQTT.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/eclipse/microprofile-reactive-streams-operators/releases&quot;&gt;MicroProfile Reactive Streams Operators 1.0&lt;/a&gt; - Reactive Messaging is built on Reactive Streams. RSO gives you a way to manipulate and handle those streams.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/eclipse/microprofile-context-propagation/releases&quot;&gt;MicroProfile Context Propagation 1.0&lt;/a&gt; - The traditional way of propagating state using ThreadLocals does not work well in the reactive world. Async/reactive code often creates a 'pipeline' of code blocks that get executed 'later' - in practice after the method defining them has returned. MicroProfile Context Propagation is there to help you deal with this, so that your deferred code can still for example latch onto the transaction initiated by the calling method.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;We have also renamed the layers (mainly by prefixing &lt;code&gt;microprofile-&lt;/code&gt; to their names) to bring them in line with the upcoming work to eventually bring
+this into WildFly. As mentioned in the &lt;a href=&quot;https://www.wildfly.org/news/2020/06/18/Introducing-the-WildFly-MicroProfile-Reactive-specifications-feature-pack/&quot;&gt;original 1.0.0.Beta1 announcement&lt;/a&gt; this feature pack is an incubator for WildFly.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The 1.0.0.Beta1 announcement also contains some background information about the specifications, as well as how to install and use the feature pack, so be sure to read that first if you are not familiar with this feature pack. Also, the &lt;a href=&quot;https://github.com/wildfly-extras/wildfly-mp-reactive-feature-pack/tree/1.0.0.Final&quot;&gt;feature pack README&lt;/a&gt; contains more detailed information about how to provision servers with this feature pack. We will not announce every single bug fix release here, so please make sure to check for the latest release on the &lt;a href=&quot;https://github.com/wildfly-extras/wildfly-mp-reactive-feature-pack/releases&quot;&gt;releases page&lt;/a&gt; (links to the tags with an up-to-date &lt;code&gt;README&lt;/code&gt; are just to the left of each release in the list).&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;what-is-coming-up&quot;&gt;What is coming up?&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;We plan to provide Reactive Messaging in WildFly for either WildFly 22 or 23. The initial focus for WildFly will be on MicroProfile Reactive Messaging 1.0 with support for Kafka. This means that MicroProfile Reactive Messaging, MicroProfile Reactive Streams Operators and the Kafka connector will be moved over to WildFly.
+That WIP currently lives in the &lt;a href=&quot;https://github.com/kabir/wildfly/tree/reactive-port&quot; class=&quot;bare&quot;&gt;https://github.com/kabir/wildfly/tree/reactive-port&lt;/a&gt; branch. MicroProfile Context Propagations which we don&amp;#8217;t see as immediately useful for the use-cases provided by MicroProfile Reactive Messaging 1.0 will remain in the feature pack. Also the AMQP and MQTT connectors will remain in the feature pack for now.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;In short WildFly will eventually contain parts of what the feature pack currently contains, while the remainder remains in a trimmed version of the feature pack.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The feature pack &lt;a href=&quot;https://github.com/wildfly-extras/wildfly-mp-reactive-feature-pack/tree/master&quot;&gt;master&lt;/a&gt; branch will still be where we cut the stable releases from if we need to fix something for the current incarnation of the feature pack. For example if we find some bugs, or if we don&amp;#8217;t make the cutoff for WildFly 22.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The reorganisation of the feature pack to deal with the partial migration of the MicroProfile Reactive specifications to WildFly will happen in the feature pack &lt;a href=&quot;https://github.com/wildfly-extras/wildfly-mp-reactive-feature-pack/tree/development&quot;&gt;development&lt;/a&gt; branch.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;feedback&quot;&gt;Feedback&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;We&amp;#8217;re keen to hear your feedback! Please raise any issues found at &lt;a href=&quot;https://github.com/wildfly-extras/wildfly-mp-reactive-feature-pack/issues&quot; class=&quot;bare&quot;&gt;https://github.com/wildfly-extras/wildfly-mp-reactive-feature-pack/issues&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</content>
+      
+
+      
+      
+      
+      
+      
+
+      <author>
+        <name>Kabir Khan</name>
+        
+        
+      </author>
+
+      
+        
+      
+
+      
+        <category term="wildfly" />
+      
+        <category term="galleon" />
+      
+        <category term="microprofile" />
+      
+        <category term="reactive" />
+      
+
+      
+        <summary type="html">I am happy to announce the 1.0.0.Final release of the MicroProfile Reactive specifications feature pack for WildFly. It is tested against both WildFly 20 and 21.</summary>
+      
+
+      
+      
+    </entry>
+  
+    <entry>
+      <title type="html">WildFly 21 S2I images have been released on quay.io</title>
+      <link href="https://wildfly.org//news/2020/11/03/WildFly-s2i-21-Released/" rel="alternate" type="text/html" title="WildFly 21 S2I images have been released on quay.io" />
+      <published>2020-11-03T00:00:00+00:00</published>
+      <updated>2020-11-03T00:00:00+00:00</updated>
+      <id>https://wildfly.org//news/2020/11/03/WildFly-s2i-21-Released</id>
+      
+      
+        <content type="html" xml:base="https://wildfly.org//news/2020/11/03/WildFly-s2i-21-Released/">&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;wildfly-21-s2i-docker-images&quot;&gt;WildFly 21 S2I Docker images&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The WildFly S2I (Source-to-Image) builder and runtime Docker images for WildFly 21 have been released on &lt;a href=&quot;https://quay.io/organization/wildfly&quot;&gt;quay.io/wildfly&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;For a complete documentation on how to use these images using S2I, OpenShift and Docker,
+refer to the WildFly S2I &lt;a href=&quot;https://github.com/wildfly/wildfly-s2i/blob/wf-21.0/README.md&quot;&gt;README&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;adding-the-imagestreams-and-template-to-openshift&quot;&gt;Adding the imagestreams and template to OpenShift&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;At some point the new images will be made available from the OpenShift catalog and image repository. But you can already use these images by adding them yourselves to your OpenShift cluster.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;WildFly S2I builder image stream:&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;oc create -n myproject -f https://raw.githubusercontent.com/wildfly/wildfly-s2i/wf-21.0/imagestreams/wildfly-centos7.json&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;WildFly runtime image stream:&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;oc create -n myproject -f https://raw.githubusercontent.com/wildfly/wildfly-s2i/wf-21.0/imagestreams/wildfly-runtime-centos7.json&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Chained build template:&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;oc create -n myproject -f https://raw.githubusercontent.com/wildfly/wildfly-s2i/wf-21.0/templates/wildfly-s2i-chained-build-template.yml&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;NB: If you import the image streams into your project, be sure to set the &lt;em&gt;ImageStreams Namespace&lt;/em&gt; (&lt;code&gt;IMAGE_STREAM_NAMESPACE&lt;/code&gt; argument) to your project namespace in the template. &lt;em&gt;openshift&lt;/em&gt; being the default namespace.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;ejb-jsf-new-galleon-layers-example&quot;&gt;EJB, JSF new Galleon layers example&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;WildFly 21 brings a new set of &lt;a href=&quot;https://docs.wildfly.org/21/Galleon_Guide.html#wildfly_layers&quot;&gt;Galleon layers&lt;/a&gt; that you can use during s2i build phase.
+In this example, we are composing a server using these 2 new Galleon layers:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;ejb-lite&lt;/code&gt;: Support for Jakarta Enterprise Beans Lite.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;jsf&lt;/code&gt;: Support for Jakarta Server Faces.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect2&quot;&gt;
+&lt;h3 id=&quot;build-and-run-the-application&quot;&gt;Build and run the application&lt;/h3&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The example is a CRUD JSF application.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Build the application image:&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;oc new-app wildfly-s2i-chained-build-template -p APPLICATION_NAME=jsf-ejb-jpa \
+      -p GIT_REPO=https://github.com/wildfly/wildfly-s2i \
+      -p GIT_BRANCH=v21.0 \
+      -p GIT_CONTEXT_DIR=examples/jsf-ejb-jpa \
+      -p GALLEON_PROVISION_LAYERS=web-server,ejb-lite,jsf,jpa,h2-driver \
+      -p IMAGE_STREAM_NAMESPACE=myproject&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Create an application from the application image:&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;oc new-app myproject/jsf-ejb-jpa&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Expose the service:&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;oc expose svc/jsf-ejb-jpa&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Access the application route.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;You will see pre-populated tasks. You can add, update and delete tasks.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Enjoy!&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</content>
+      
+
+      
+      
+      
+      
+      
+
+      <author>
+        <name>Jean-François Denise</name>
+        
+        
+      </author>
+
+      
+        
+      
+
+      
+        <category term="wildfly" />
+      
+        <category term="galleon" />
+      
+
+      
+        <summary type="html">WildFly 21 S2I Docker images</summary>
+      
+
+      
+      
+    </entry>
+  
+    <entry>
+      <title type="html">New Security Features in WildFly 21</title>
+      <link href="https://wildfly-security.github.io/wildfly-elytron/blog/new-security-features-in-wildfly-21/" rel="alternate" type="text/html" title="New Security Features in WildFly 21" />
+      <published>2020-11-02T00:00:00+00:00</published>
+      <updated>2020-11-02T00:00:00+00:00</updated>
+      <id>https://wildfly-security.github.io/wildfly-elytron/blog/new-security-features-in-wildfly-21/</id>
+      
+      
+        <content type="html" xml:base="https://wildfly-security.github.io/wildfly-elytron/blog/new-security-features-in-wildfly-21/"></content>
+      
+
+      
+      
+      
+      
+      
+
+      <author>
+        <name>Farah Juma</name>
+        
+        
+      </author>
+
+      
+        
+      
+
+      
+        <category term="elytron" />
+      
+        <category term="wildfly" />
+      
+
+      
+
+      
+      
+    </entry>
+  
+    <entry>
+      <title type="html">Release of WildFly Operator 0.4.1</title>
+      <link href="https://wildfly.org//news/2020/10/27/wildfly-operator-0.4.1-released/" rel="alternate" type="text/html" title="Release of WildFly Operator 0.4.1" />
+      <published>2020-10-27T00:00:00+00:00</published>
+      <updated>2020-10-27T00:00:00+00:00</updated>
+      <id>https://wildfly.org//news/2020/10/27/wildfly-operator-0.4.1-released</id>
+      
+      
+        <content type="html" xml:base="https://wildfly.org//news/2020/10/27/wildfly-operator-0.4.1-released/">&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The WildFly Operator helps deploy and manage WildFly applications on Kubernetes and OpenShift.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;With the recently released 0.4.1 version, the WildFly Operator is now able to provide seamless upgrades of your application on OpenShift.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;admonitionblock note&quot;&gt;
+&lt;table&gt;
+&lt;tr&gt;
+&lt;td class=&quot;icon&quot;&gt;
+&lt;div class=&quot;title&quot;&gt;Note&lt;/div&gt;
+&lt;/td&gt;
+&lt;td class=&quot;content&quot;&gt;
+This feature is specific to OpenShift as it relies on resources such as &lt;code&gt;ImageStreams&lt;/code&gt; that are not provided by vanilla Kubernetes.
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The WildFly operator was using the &lt;code&gt;applicationImage&lt;/code&gt; field to identify and deploy your application on the container platform.
+This field accepts different types:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;the name of the image: quay.io/jmesnil/wildfly-demo-app:step-1&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;a tag: quay.io/jmesnil/wildfly-demo-app:step-1&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;a digest: quay.io/wildfly-quickstarts/wildfly-operator-quickstart@sha256:0af38bc38be93116b6a1d86a9c78bd14cd527121970899d719baf78e5dc7bfd2&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;In all these cases, the container platform would pull the image when the application is deployed and uses it for the whole application lifecycle.
+If you wanted to deploy a new image, you had to edit the &lt;code&gt;applicationImage&lt;/code&gt; manually and specify the checksum of the new image to deploy.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Now, with the 0.4.1 release, the WildFly Operator also accepts an &lt;code&gt;ImageStreamTag&lt;/code&gt; for its &lt;code&gt;applicationImage&lt;/code&gt; field, for example &lt;code&gt;wildfly-demo-app:latest&lt;/code&gt;.
+This imagestream tag must belong to an &lt;code&gt;ImageStream&lt;/code&gt; in the same namespace than the application. With that simple setting, any changes to the imagestream tag will trigger a new deployment of the application without having to modify any resources.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;admonitionblock note&quot;&gt;
+&lt;table&gt;
+&lt;tr&gt;
+&lt;td class=&quot;icon&quot;&gt;
+&lt;div class=&quot;title&quot;&gt;Note&lt;/div&gt;
+&lt;/td&gt;
+&lt;td class=&quot;content&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;This article does not provide an extensive explanation on how Images are managed by OpenShift with ImageStreams and ImageStreamTags.
+Please refer to the &lt;a href=&quot;https://docs.openshift.com/container-platform/4.5/openshift_images/images-understand.html&quot;&gt;OpenShift documentation&lt;/a&gt; for a complete description.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;create-a-demo-application&quot;&gt;Create a Demo application&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;To illustrate this feature, I wrote a very simple MicroProfile application that return a JSONified version of &quot;Hello, World!&quot;:
+ &lt;a href=&quot;https://github.com/jmesnil/wildfly-operator-demo-app&quot; class=&quot;bare&quot;&gt;https://github.com/jmesnil/wildfly-operator-demo-app&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;title&quot;&gt;AppEndpoint.java&lt;/div&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;@Path(&quot;/&quot;)
+@ApplicationScoped
+public class AppEndpoint {
+
+    @Inject
+    @ConfigProperty(name = &quot;greetings&quot;, defaultValue = &quot;Hello&quot;)
+    String greetings;
+
+    @GET
+    @Produces({ &quot;application/json&quot; })
+    public String getText() {
+        String text = &quot;{\&quot;text\&quot;:\&quot;&quot; + greetings + &quot;, World!\&quot;}&quot;;
+        return text;
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;As the application has access to the full MicroProfile APIs (including MicroProfile Config), it is possible to configure the greetings returned by the application by setting the &lt;code&gt;greetings&lt;/code&gt; config property (which defaults to &lt;code&gt;&quot;Hello&quot;&lt;/code&gt;).
+It can be configured using an environment variable named &lt;code&gt;GREETINGS&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;I have built a Docker image of this application and pushed it to &lt;code&gt;quay.io/jmesnil/wildfly-demo-app:step-1&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;You can run it directly from Docker:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;$ docker run -p 8080:8080 -e GREETINGS=Bonjour quay.io/jmesnil/wildfly-demo-app:step-1
+...
+$ curl http://localhost:8080
+{&quot;text&quot;:&quot;Bonjour, World!&quot;}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;admonitionblock note&quot;&gt;
+&lt;table&gt;
+&lt;tr&gt;
+&lt;td class=&quot;icon&quot;&gt;
+&lt;div class=&quot;title&quot;&gt;Note&lt;/div&gt;
+&lt;/td&gt;
+&lt;td class=&quot;content&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;I created this Docker image from the &lt;code&gt;step-1&lt;/code&gt; tag of the Git repository. It uses the &lt;a href=&quot;https://quay.io/repository/wildfly/wildfly-centos7&quot;&gt;WildFly 21 S2I image&lt;/a&gt; and the &lt;code&gt;microprofile-platform&lt;/code&gt; layer so that the image contains only what is needed to run a MicroProfile application.
+The command I used to create the application image is:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;$ s2i build https://github.com/jmesnil/wildfly-operator-demo-app.git \
+    --ref=step-1                                                     \
+    quay.io/wildfly/wildfly-centos7:21.0                             \
+    -e GALLEON_PROVISION_LAYERS=microprofile-platform                \
+    wildfly-demo-app:step-1&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;To show how we can seamlessly upgrade to a new version of this application, I created a second image of the application corresponding to the &lt;code&gt;step-2&lt;/code&gt; tag where the text is now returned in uppercase:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;public String getText() {
+    String text = &quot;{\&quot;text\&quot;:\&quot;&quot; + (greetings + &quot;, World!&quot;).toUpperCase() + &quot;\&quot;}&quot;;
+    return text;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;This second image is pushed to &lt;code&gt;quay.io/jmesnil/wildfly-demo-app:step-2&lt;/code&gt; and can also be run directly from Docker:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;$ docker run -p 8080:8080 -e GREETINGS=Ahoj quay.io/jmesnil/wildfly-demo-app:step-2
+...
+$ curl http://localhost:8080
+{&quot;text&quot;:&quot;AHOJ, WORLD!&quot;}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;install-the-wildfly-operator-on-openshift&quot;&gt;Install the WildFly Operator on OpenShift&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;We will first install the WildFly Operator on OpenShift in a new project named &lt;code&gt;wildfly-demo&lt;/code&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;First, we create the new project (and the corresponding namespace):&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;$ oc new-project wildfly-demo&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Then we install a &lt;code&gt;CatalogSource&lt;/code&gt; to get access to the WildFly Operator that is in the operatorhub.io catalog:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;title&quot;&gt;operatorhub-io-catalogsource.yaml&lt;/div&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: operatorhub-io
+spec:
+  displayName: Operators from operatorhub.io
+  image: quay.io/operatorhubio/catalog:latest
+  sourceType: grpc&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;We install it by running:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;$ oc apply -f operatorhub-io-catalogsource.yaml
+catalogsource.operators.coreos.com/operatorhub-io created&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Then we create a subscription for the current version (0.4.1) of the WildFly Operator:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;title&quot;&gt;wildfly.yaml&lt;/div&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: wildfly
+  labels:
+    operators.coreos.com/wildfly.wildfly-demo: ''
+spec:
+  channel: alpha
+  installPlanApproval: Automatic
+  name: wildfly
+  source: operatorhub-io
+  sourceNamespace: wildfly-demo
+  startingCSV: wildfly-operator.v0.4.1&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Again, we install it on OpenShift by running:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;$ oc apply -f wildfly.yaml
+subscription.operators.coreos.com/wildfly created&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;We will then wait until the WildFly Operator is installed by monitoring its installation:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;$ oc get csv -w
+NAME                      DISPLAY   VERSION   REPLACES   PHASE
+wildfly-operator.v0.4.1   WildFly   0.4.1
+wildfly-operator.v0.4.1   WildFly   0.4.1                Pending
+...
+wildfly-operator.v0.4.1   WildFly   0.4.1                InstallReady
+...
+wildfly-operator.v0.4.1   WildFly   0.4.1                Installing
+...
+wildfly-operator.v0.4.1   WildFly   0.4.1                Succeeded&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;admonitionblock note&quot;&gt;
+&lt;table&gt;
+&lt;tr&gt;
+&lt;td class=&quot;icon&quot;&gt;
+&lt;div class=&quot;title&quot;&gt;Note&lt;/div&gt;
+&lt;/td&gt;
+&lt;td class=&quot;content&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;For the purpose of this example, the WildFly Operator is only be installed in the current &lt;code&gt;wildfly-demo&lt;/code&gt; namespace.
+All resources that are created must also be installed in that same namespace.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;create-an-imagestream&quot;&gt;Create an ImageStream&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Before we can deploy our application on OpenShift using the WildFly Operator, we will first create
+an &lt;code&gt;ImageStream&lt;/code&gt; named &lt;code&gt;wildfly-demo-app&lt;/code&gt; that will contain a stream of all our application images&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;$ oc import-image wildfly-demo-app:step-1          \
+    --from quay.io/jmesnil/wildfly-demo-app:step-1 \
+    --confirm&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;We have added the &lt;code&gt;wildfly-demo-app:step-1&lt;/code&gt; imagestream tag to this imagestream by importing the Docker image from &lt;code&gt;quay.io/jmesnil/wildfly-demo-app:step-1&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Then we tag it with the &lt;code&gt;latest&lt;/code&gt; tag that will be referenced from our deployments.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;$ oc tag wildfly-demo-app:step-1  wildfly-demo-app:latest&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;At this point, we have an &lt;code&gt;ImageStreamTag&lt;/code&gt; &lt;code&gt;wildfly-demo-app:latest&lt;/code&gt; that we can use to deploy our application and upgrade it later seamlessly.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;We have finally the image inside OpenShift  and are ready to deploy our application.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;deploy-the-application&quot;&gt;Deploy the Application&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;To deploy the application, we create a &lt;code&gt;WildFlyServer&lt;/code&gt; resource with the &lt;code&gt;applicationImage&lt;/code&gt; set to &lt;code&gt;wildfly-demo-app:latest&lt;/code&gt;.
+This will let OpenShift pull the image from the &lt;code&gt;latest&lt;/code&gt; imagestream tag in the &lt;code&gt;wildfly-demo-app&lt;/code&gt; imagestream.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;title&quot;&gt;wildfly-app.yaml&lt;/div&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;apiVersion: wildfly.org/v1alpha1
+kind: WildFlyServer
+metadata:
+  name: wildfly-app
+spec:
+  applicationImage: 'wildfly-demo-app:latest'
+  env:
+    - name: GREETINGS
+      value: Guten Tag
+  replicas: 2&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;$ oc apply -f wildfly-app.yaml
+wildflyserver.wildfly.org/wildfly-app created&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The WildFly Operator will then configure and deploy the application on OpenShift.
+It will also automatically create a &lt;code&gt;Route&lt;/code&gt; to access it outside of the cluster.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The application is thoroughly described by the &lt;code&gt;oc describe&lt;/code&gt; command:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Name:         wildfly-app
+Namespace:    wildfly-demo
+Kind:         WildFlyServer
+Metadata:
+  ...
+Spec:
+  Application Image:  wildfly-demo-app:latest
+  Env:
+    Name:    GREETINGS
+    Value:   Guten Tag
+  Replicas:  2
+Status:
+  Hosts:
+    wildfly-app-route-wildfly-demo.apps.jmesnil-80cs.eapqe.psi.redhat.com
+  Pods:
+    Name:            wildfly-app-0
+    Pod IP:          10.128.2.199
+    State:           ACTIVE
+    Name:            wildfly-app-1
+    Pod IP:          10.128.2.200
+    State:           ACTIVE
+  Replicas:          2
+  Scalingdown Pods:  0
+Events:              &amp;lt;none&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The only information we need is the &lt;code&gt;hosts&lt;/code&gt; field that contains the public URL of our application.
+If we access it, we can get our text message:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;$ curl http://$(oc get wfly/wildlfy-app -o jsonpath=&quot;{.status.hosts[0]}&quot;)
+{&quot;text&quot;:&quot;Guten Tag, World!&quot;}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;seamless-upgrade-to-a-new-version-of-the-application-image&quot;&gt;Seamless Upgrade to a New Version of the Application Image&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;We now want to deploy the second version of our application without disrupting our services.
+We can take advantage of seamless upgrades to do it.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;First, we will import the &lt;code&gt;quay.io/jmesnil/wildfly-demo-app:step-2&lt;/code&gt; image in the &lt;code&gt;wildfly-demo-app&lt;/code&gt; imagestream with the &lt;code&gt;step-2&lt;/code&gt; tag:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;$ oc import-image wildfly-demo-app:step-2          \
+    --from quay.io/jmesnil/wildfly-demo-app:step-2 \
+    --confirm&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;At this point, nothing has changed, the image is available in OpenShift but the WildFly Operator will not use it as it only references the &lt;code&gt;wildfly-demo-app:latest&lt;/code&gt; imagestream tag.
+Let&amp;#8217;s now change this &lt;code&gt;latest&lt;/code&gt; tag to point to the &lt;code&gt;wildfly-demo-app:step-2&lt;/code&gt; tag.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;$ oc tag wildfly-demo-app:step-2 wildfly-demo-app:latest
+Tag wildfly-demo-app:latest set to wildfly-demo-app@sha256:a9970ab8cebad210d7248e090ea88d6af87e8f910c7a087a3aac03c951cd764e.&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Once this is done, OpenShift will observe that the &lt;code&gt;latest&lt;/code&gt; tag has changed (it corresponds to a new image) and will notify the WildFly Operator to trigger a new deployment
+of the application.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;If you continue to access the public route of the application, you will see that it will eventually return the upper case version of the text:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;$ curl http://$(oc get wfly/wildlfy-demo-app -o jsonpath=&quot;{.status.hosts[0]}&quot;)
+{&quot;text&quot;:&quot;GUTEN TAG, WORLD!&quot;}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;It can take some time as OpenShift will terminate and redeploy all the Pods that runs the application.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;image-build-pipeline&quot;&gt;Image Build Pipeline&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;This short demo illustrates that it is now possible to seamlessly upgrade an application maintained by the WildFly Operator by using an imagestream tag to refer to the application image.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;To illustrate this, we did a step-by-step demo to understand how and when the upgrade is triggered. However, in normal use, most of these steps are automated and the upgrade becomes really seamless (and do not require user intervention).&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;There is a lot more that can be achieved by taking full advantage of the OpenShift ecosystem to &lt;a href=&quot;https://docs.openshift.com/container-platform/4.5/openshift_images/images-understand.html&quot;&gt;build and deploy images&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;I have built the application image using S2I outside of OpenShift but it is possible to use &lt;code&gt;BuildConfig&lt;/code&gt; resources to build the image &lt;em&gt;inside&lt;/em&gt; OpenShift and automatically tag them with the &lt;code&gt;latest&lt;/code&gt; imagestream tag.
+Using &lt;code&gt;BuildConfig&lt;/code&gt; to build the images has two main benefits:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;You can specify hooks to trigger building new images when the code from a remote Git repository is updated.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;You can also trigger building new images when WildFly S2I images are upgraded. In that case, seamless upgrades apply not only to the application image but also to the WildFly S2I images that are used to build the application image.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;In a more realistic example, we could have a staging cluster with a &lt;code&gt;BuildConfig&lt;/code&gt; that would trigger new application images when the code is updated (or when a new Git tag is pushed to a remote repository) or when new WildFly S2I images are released.
+This would automatically trigger a test pipeline to test and verify the new application image.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Once this new application image has been validated (automatically or manually), we can then push this new application image in our production cluster and tag it with &lt;code&gt;latest&lt;/code&gt; to trigger an upgrade of the application in production.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;summary&quot;&gt;Summary&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;When it is running on OpenShift, the WildFly Operator can leverage its ecosystem around Images to provide seamless upgrades of applications to trigger new deployments
+when anything in the build pipeline (application code or WildFly images) changes.
+This simplifies application maintenance and reduces security risks by automating the upgrades and making sure that the application is always built on top of the latest application code and WildFly images.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;more-information&quot;&gt;More information&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/wildfly/wildfly-operator/blob/master/doc/user-guide.adoc&quot;&gt;User Documentation for WildFly Operator&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/wildfly/wildfly-s2i&quot;&gt;WildFly S2I Project&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https://docs.openshift.com/container-platform/4.5/openshift_images/images-understand.html&quot;&gt;OpenShift Documentation - Understanding containers, images, and imagestreams&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</content>
+      
+
+      
+      
+      
+      
+      
+
+      <author>
+        <name>Jeff Mesnil</name>
+        
+        
+      </author>
+
+      
+        
+      
+
+      
+        <category term="wildfly" />
+      
+        <category term="openshift" />
+      
+        <category term="operator" />
+      
+
+      
+        <summary type="html">The WildFly Operator helps deploy and manage WildFly applications on Kubernetes and OpenShift.</summary>
+      
+
+      
+      
+    </entry>
+  
+    <entry>
+      <title type="html">WildFly Bootable JAR is final!</title>
+      <link href="https://wildfly.org//news/2020/10/19/bootable-jar-2.0-released/" rel="alternate" type="text/html" title="WildFly Bootable JAR is final!" />
+      <published>2020-10-19T00:00:00+00:00</published>
+      <updated>2020-10-19T00:00:00+00:00</updated>
+      <id>https://wildfly.org//news/2020/10/19/bootable-jar-2.0-released</id>
+      
+      
+        <content type="html" xml:base="https://wildfly.org//news/2020/10/19/bootable-jar-2.0-released/">&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;As we &lt;a href=&quot;https://www.wildfly.org/news/2020/06/18/Bootable-jar-Wildfly-20/&quot;&gt;introduced&lt;/a&gt; few months ago,
+we have been working on a &quot;Fat JAR&quot; packaging for WildFly. We are pleased to announce that the 2.0.0 Final version of the
+&lt;a href=&quot;https://github.com/wildfly-extras/wildfly-jar-maven-plugin/&quot;&gt;WildFly bootable JAR Maven plugin&lt;/a&gt; has been released.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;WildFly 21, that has just been released (you can check the &lt;a href=&quot;https://www.wildfly.org/news/2020/10/13/WildFly21-Final-Released/&quot;&gt;announcement&lt;/a&gt;),
+fully supports this new way of packaging applications.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;A bootable JAR allows you to package both the server and your application deployment
+inside a single JAR file and execute it with a simple
+command such as &lt;code&gt;&lt;code&gt;java -jar myapp-bootable.jar&lt;/code&gt;&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;admonitionblock important&quot;&gt;
+&lt;table&gt;
+&lt;tr&gt;
+&lt;td class=&quot;icon&quot;&gt;
+&lt;div class=&quot;title&quot;&gt;Important&lt;/div&gt;
+&lt;/td&gt;
+&lt;td class=&quot;content&quot;&gt;
+There is no need to re-design your application to have it executed inside a bootable JAR.
+Developing an application packaged as a bootable JAR is not different from developing an application for a traditional
+WildFly server installation using Maven.
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;wildfly-installation-strategies&quot;&gt;WildFly installation strategies&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Along side the &lt;a href=&quot;https://www.wildfly.org/downloads/&quot;&gt;WildFly zip installation&lt;/a&gt; and
+&lt;a href=&quot;https://docs.wildfly.org/21/Galleon_Guide.html&quot;&gt;Galleon provisioning&lt;/a&gt;, the bootable JAR Maven plugin
+introduces a new way to install a WildFly server and package your applications.
+In order to help you identify the more appropriate installation strategy,
+the WildFly documentation introduces a new &lt;a href=&quot;https://docs.wildfly.org/21/Installation_Guide.html&quot;&gt;Installation Guide&lt;/a&gt;
+that helps you choose the best approach according to your application needs.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;wildfly-bootable-jar&quot;&gt;WildFly Bootable JAR&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;To help you start with this new packaging, we have defined a &lt;a href=&quot;https://docs.wildfly.org/21/Bootable_Guide.html&quot;&gt;WildFly Bootable Guide&lt;/a&gt;. This guide summarizes
+the steps required to get started. For a detailed documentation of the Maven Plugin
+usage, you can read the &lt;a href=&quot;https://docs.wildfly.org/bootablejar/&quot;&gt;Maven plugin documentation&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The &lt;a href=&quot;https://github.com/wildfly-extras/wildfly-jar-maven-plugin/tree/2.0.0.Final/examples&quot;&gt;example Maven projects&lt;/a&gt;
+are a good place to start practicing with the Maven plugin.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The &lt;a href=&quot;https://github.com/wildfly/quickstart/tree/21.0.0.Final&quot;&gt;WildFly quickstarts&lt;/a&gt;
+that cover Eclipse MicroProfile features have been evolved with the 'bootable-jar' and 'bootable-jar-openshift' Maven profiles allowing
+you to use the bootable JAR plugin.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;using-maven&quot;&gt;Using Maven&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Packaging your application inside a bootable JAR is done when building your application using Maven.
+This is done by adding an extra build step to your Maven application pom.xml file.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&amp;lt;build&amp;gt;
+  &amp;lt;plugins&amp;gt;
+    &amp;lt;plugin&amp;gt;
+      &amp;lt;groupId&amp;gt;org.wildfly.plugins&amp;lt;/groupId&amp;gt;
+      &amp;lt;artifactId&amp;gt;wildfly-jar-maven-plugin&amp;lt;/artifactId&amp;gt;
+      &amp;lt;configuration&amp;gt;
+        ...
+      &amp;lt;/configuration&amp;gt;
+      &amp;lt;executions&amp;gt;
+        &amp;lt;execution&amp;gt;
+          &amp;lt;goals&amp;gt;
+            &amp;lt;goal&amp;gt;package&amp;lt;/goal&amp;gt;
+          &amp;lt;/goals&amp;gt;
+        &amp;lt;/execution&amp;gt;
+      &amp;lt;/executions&amp;gt;
+    &amp;lt;/plugin&amp;gt;
+  &amp;lt;/plugins&amp;gt;
+&amp;lt;/build&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Then call &lt;code&gt;&lt;code&gt;mvn package&lt;/code&gt;&lt;/code&gt; to build both your deployment and the bootable
+JAR ( &lt;code&gt;&lt;code&gt;target/&amp;lt;app name&amp;gt;-bootable.jar&lt;/code&gt;&lt;/code&gt; file) that contains it.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The details on how to configure the build of a bootable JAR can be found in the
+&lt;a href=&quot;https://docs.wildfly.org/bootablejar/&quot;&gt;Maven plugin documentation&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;bootable_jar_2_0_composing_server&quot;&gt;Composing a WildFly Server&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;sect2&quot;&gt;
+&lt;h3 id=&quot;galleon-layers&quot;&gt;Galleon layers&lt;/h3&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The Maven plugin depends on &lt;a href=&quot;https://docs.wildfly.org/galleon/&quot;&gt;Galleon&lt;/a&gt;
+trimming capabilities to build a tailored server.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;From the plugin configuration element, you need to provide the WildFly Galleon feature-pack and the list of Galleon layers
+you want to include/exclude.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The WildFly Galleon feature-pack is a maven artifact that contains everything needed to dynamically provision a server.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;A WildFly Galleon
+layer is a name that identifies a server capability (e.g.: jaxrs, ejb, microprofile-config, jpa) or an aggregation of such capabilities.
+A layer captures a server capability in the form of:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;A piece of server XML configuration (e.g.: extension, configured subsystem, interfaces) that describes the capability.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;A set of JBoss modules that implements the capability.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;When you are using a layer, it delivers these pieces of information in order for Galleon to assemble a server containing only the required configuration and JBoss modules.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;WildFly Documentation contains a &lt;a href=&quot;https://docs.wildfly.org/21/Bootable_Guide.html#wildfly_layers&quot;&gt;description&lt;/a&gt; of the WildFly Galleon layers.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;An example of a plugin configuration needed to compose a server to run typical REST applications with support for distributed sessions:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&amp;lt;configuration&amp;gt;
+  ...
+  &amp;lt;feature-pack-location&amp;gt;wildfly@maven(org.jboss.universe:community-universe)&amp;lt;/feature-pack-location&amp;gt; (1)
+  &amp;lt;layers&amp;gt; (2)
+    &amp;lt;layer&amp;gt;jaxrs-server&amp;lt;/layer&amp;gt; (3)
+    &amp;lt;layer&amp;gt;web-clustering&amp;lt;/layer&amp;gt; (4)
+  &amp;lt;/layers&amp;gt;
+&amp;lt;/configuration&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;(1) In this plugin configuration extract, we are retrieving the latest WildFly Galleon feature-pack installed in the
+ &lt;code&gt;&lt;code&gt;org.jboss.universe:community-universe&lt;/code&gt;&lt;/code&gt; Galleon universe. In case you would like to provision a specific version of the server,
+you would need to specify the server version, for example &lt;code&gt;&lt;code&gt;wildfly@maven(org.jboss.universe:community-universe)#21.0.0.Final&lt;/code&gt;&lt;/code&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;(2) The included set of layers.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;(3) &lt;a href=&quot;https://docs.wildfly.org/21/Bootable_Guide.html#gal.jaxrs-server&quot;&gt;jaxrs-server&lt;/a&gt; is a foundational layer which provides capabilities
+required to build typical REST applications as well as core WildFly capabilities like the logging subsystem and a secure remote management interface.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;(4) &lt;a href=&quot;https://docs.wildfly.org/21/Bootable_Guide.html#gal.web-clustering&quot;&gt;web-clustering&lt;/a&gt; is a layer that provides Infinispan-based web session clustering.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;admonitionblock important&quot;&gt;
+&lt;table&gt;
+&lt;tr&gt;
+&lt;td class=&quot;icon&quot;&gt;
+&lt;div class=&quot;title&quot;&gt;Important&lt;/div&gt;
+&lt;/td&gt;
+&lt;td class=&quot;content&quot;&gt;
+You are strongly advised to check the WildFly Galleon layers &lt;a href=&quot;https://docs.wildfly.org/21/Bootable_Guide.html#wildfly_layers&quot;&gt;documentation&lt;/a&gt; in order to
+identify the Galleon layers that will fit your application needs.
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect2&quot;&gt;
+&lt;h3 id=&quot;third-party-galleon-layers&quot;&gt;Third-party Galleon layers&lt;/h3&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The plugin allows you to combine Galleon layers from multiple sources. A source of Galleon layers
+must be a Galleon feature-pack designed to be usable with WildFly.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;For example, the project &lt;a href=&quot;https://github.com/wildfly-extras/wildfly-datasources-galleon-pack&quot;&gt;wildfly-datasources-galleon-pack&lt;/a&gt;
+defines a Galleon feature-pack that contains layers for postgresql, mysql and oracle drivers and datasources.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;In order to compose a server from multiple source use the &lt;code&gt;&lt;code&gt;&amp;lt;feature-packs&amp;gt;&lt;/code&gt;&lt;/code&gt; configuration element. For example:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&amp;lt;configuration&amp;gt;
+  ...
+  &amp;lt;feature-packs&amp;gt;
+    &amp;lt;feature-pack&amp;gt;
+      &amp;lt;location&amp;gt;wildfly@maven(org.jboss.universe:community-universe)#21.0.0.Final&amp;lt;/location&amp;gt;
+    &amp;lt;/feature-pack&amp;gt;
+    &amp;lt;feature-pack&amp;gt;
+      &amp;lt;groupId&amp;gt;org.wildfly&amp;lt;/groupId&amp;gt;
+      &amp;lt;artifactId&amp;gt;wildfly-datasources-galleon-pack&amp;lt;/artifactId&amp;gt;
+      &amp;lt;version&amp;gt;1.1.0.Final&amp;lt;/version&amp;gt;
+    &amp;lt;/feature-pack&amp;gt;
+  &amp;lt;/feature-packs&amp;gt;
+  &amp;lt;layers&amp;gt;
+    &amp;lt;layer&amp;gt;cloud-server&amp;lt;/layer&amp;gt; (1)
+    &amp;lt;layer&amp;gt;postgresql-datasource&amp;lt;/layer&amp;gt; (2)
+  &amp;lt;/layers&amp;gt;
+&amp;lt;/configuration&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;(1) &lt;a href=&quot;https://docs.wildfly.org/21/Bootable_Guide.html#gal.cloud-server&quot;&gt;cloud-server&lt;/a&gt; comes from the WildFly Galleon feature-pack.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;(2) &lt;code&gt;&lt;code&gt;postgresql-datasource&lt;/code&gt;&lt;/code&gt; comes from the &lt;a href=&quot;https://github.com/wildfly-extras/wildfly-datasources-galleon-pack/&quot;&gt;wildfly-datasources-galleon-pack&lt;/a&gt; Galleon feature-pack.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The &lt;a href=&quot;https://github.com/wildfly-extras/wildfly-jar-maven-plugin/tree/2.0.0.Final/examples/postgresql&quot;&gt;postgresql example&lt;/a&gt;
+shows how to combine Galleon layers from multiple sources.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;developer-experience&quot;&gt;Developer Experience&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;A strong focus has been put on &quot;Developer Experience&quot;, in particular when it comes to
+development efficiency and development for cloud.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect2&quot;&gt;
+&lt;h3 id=&quot;cloud-support&quot;&gt;Cloud support&lt;/h3&gt;
+&lt;div class=&quot;sect3&quot;&gt;
+&lt;h4 id=&quot;adapting-the-server-configuration-to-openshift&quot;&gt;Adapting the server configuration to OpenShift&lt;/h4&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;To properly operate in an OpenShift context, a server such as WildFly requires
+configuration tuning in order to adapt to the cloud execution context
+(e.g.:socket binding, HA cluster protocol, logging, health checks).
+This tuning is automatically applied when you are using the plugin to build
+applications for OpenShift.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;When building an application to be deployed on OpenShift you need to add the &lt;code&gt;&lt;code&gt;&amp;lt;cloud&amp;gt;&lt;/code&gt;&lt;/code&gt;
+configuration element.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;  &amp;lt;configuration&amp;gt;
+    ...
+    &amp;lt;cloud/&amp;gt;
+  &amp;lt;/configuration&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The &lt;a href=&quot;https://github.com/wildfly-extras/wildfly-jar-maven-plugin/tree/2.0.0.Final/examples/web-clustering&quot;&gt;web-clustering&lt;/a&gt; example
+shows how to build a cluster of bootable JARs running on OpenShift.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The details on how to configure a bootable JAR for cloud execution can be found in the
+&lt;a href=&quot;https://docs.wildfly.org/bootablejar/#wildfly_jar_configuring_cloud&quot;&gt;Configuring the server for cloud execution&lt;/a&gt; chapter of the Maven plugin documentation.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect3&quot;&gt;
+&lt;h4 id=&quot;zero-configuration-with-the-eclipse-jkube-plugin&quot;&gt;Zero configuration with the Eclipse JKube plugin&lt;/h4&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The &lt;a href=&quot;https://www.eclipse.org/jkube/&quot;&gt;JKube&lt;/a&gt; plugin automates build and deployment
+of your application for OpenShift or Kubernetes.
+By combining the WildFly bootable JAR and JKube plugins you can achieve &quot;zero configuration&quot;
+for application deployment. No Openshift resource creation, no docker image creation,
+just let the plugin runs!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&amp;lt;build&amp;gt;
+  &amp;lt;plugins&amp;gt;
+    &amp;lt;plugin&amp;gt;
+      &amp;lt;groupId&amp;gt;org.wildfly.plugins&amp;lt;/groupId&amp;gt;
+      &amp;lt;artifactId&amp;gt;wildfly-jar-maven-plugin&amp;lt;/artifactId&amp;gt;
+      &amp;lt;configuration&amp;gt;
+        &amp;lt;feature-pack-location&amp;gt;wildfly@maven(org.jboss.universe:community-universe)#21.0.0.Final&amp;lt;/feature-pack-location&amp;gt;
+        &amp;lt;layers&amp;gt;
+          &amp;lt;layer&amp;gt;cloud-server&amp;lt;/layer&amp;gt;
+        &amp;lt;/layers&amp;gt;
+        &amp;lt;cloud/&amp;gt;
+      &amp;lt;/configuration&amp;gt;
+      &amp;lt;executions&amp;gt;
+        &amp;lt;execution&amp;gt;
+          &amp;lt;goals&amp;gt;
+           &amp;lt;goal&amp;gt;package&amp;lt;/goal&amp;gt;
+          &amp;lt;/goals&amp;gt;
+        &amp;lt;/execution&amp;gt;
+      &amp;lt;/executions&amp;gt;
+    &amp;lt;/plugin&amp;gt;
+    &amp;lt;plugin&amp;gt;
+      &amp;lt;groupId&amp;gt;org.eclipse.jkube&amp;lt;/groupId&amp;gt;
+      &amp;lt;artifactId&amp;gt;openshift-maven-plugin&amp;lt;/artifactId&amp;gt;
+      &amp;lt;executions&amp;gt;
+        &amp;lt;execution&amp;gt;
+          &amp;lt;goals&amp;gt;
+            &amp;lt;goal&amp;gt;resource&amp;lt;/goal&amp;gt;
+            &amp;lt;goal&amp;gt;build&amp;lt;/goal&amp;gt;
+          &amp;lt;/goals&amp;gt;
+        &amp;lt;/execution&amp;gt;
+      &amp;lt;/executions&amp;gt;
+      &amp;lt;configuration&amp;gt;
+        &amp;lt;enricher&amp;gt;
+          &amp;lt;config&amp;gt;
+            &amp;lt;jkube-service&amp;gt;
+              &amp;lt;type&amp;gt;NodePort&amp;lt;/type&amp;gt;
+            &amp;lt;/jkube-service&amp;gt;
+          &amp;lt;/config&amp;gt;
+        &amp;lt;/enricher&amp;gt;
+      &amp;lt;/configuration&amp;gt;
+    &amp;lt;/plugin&amp;gt;
+  &amp;lt;/plugins&amp;gt;
+&amp;lt;/build&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Then call &lt;code&gt;&lt;code&gt;mvn oc:deploy&lt;/code&gt;&lt;/code&gt; to build your deployment, create a bootable JAR and deploy it onto openshift.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;admonitionblock important&quot;&gt;
+&lt;table&gt;
+&lt;tr&gt;
+&lt;td class=&quot;icon&quot;&gt;
+&lt;div class=&quot;title&quot;&gt;Important&lt;/div&gt;
+&lt;/td&gt;
+&lt;td class=&quot;content&quot;&gt;
+Make sure you are logged in to your OpenShift Cluster prior to calling &lt;code&gt;&lt;code&gt;oc:deploy&lt;/code&gt;&lt;/code&gt;.
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The &lt;a href=&quot;https://github.com/wildfly-extras/wildfly-jar-maven-plugin/tree/2.0.0.Final/examples/jkube&quot;&gt;jkube&lt;/a&gt; example
+shows how to use the WildFly bootable JAR and JKube Maven plugin.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The &lt;a href=&quot;https://www.eclipse.org/jkube/docs/openshift-maven-plugin&quot;&gt;JKube plugin documentation&lt;/a&gt; contains
+information on how you can customize liveness and readiness probes.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect2&quot;&gt;
+&lt;h3 id=&quot;dev-mode&quot;&gt;Dev mode&lt;/h3&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;In order to speed-up the development of your application, the Maven plugin offers
+the &lt;code&gt;&lt;code&gt;wildfly-jar:dev&lt;/code&gt;&lt;/code&gt; goal that builds and starts the bootable JAR only once.
+When you re-package your application, it will get automatically re-deployed in
+the running server.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The details on how to use the &lt;code&gt;&lt;code&gt;dev&lt;/code&gt;&lt;/code&gt; goal can be found in the
+&lt;a href=&quot;https://docs.wildfly.org/bootablejar/#wildfly_jar_dev_mode&quot;&gt;Development mode&lt;/a&gt; chapter of the Maven plugin documentation.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;server-configuration&quot;&gt;Server configuration&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;In case the default configuration that Galleon layers bring is not complete,
+the plugin allows you to fine tune the packaged server.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect2&quot;&gt;
+&lt;h3 id=&quot;wildfly-cli-scripts&quot;&gt;WildFly CLI scripts&lt;/h3&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Although Galleon layers contains commonly used server configuration elements,
+it can be required to fine tune the server. The WildFly CLI tooling
+has been integrated into the Maven plugin in order to apply management operations
+during build. That is done by defining one or more CLI script files
+containing the list of management operations you want to see executed during packaging.
+For example:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;A CLI script to add the &lt;code&gt;&lt;code&gt;org.foo.demo&lt;/code&gt;&lt;/code&gt; logging logger, set its level and configure the console handler to print log messages of all levels:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre&gt;/subsystem=logging/logger=org.foo.demo:add
+/subsystem=logging/logger=org.foo.demo:write-attribute(name=level,value=ALL)
+/subsystem=logging/console-handler=CONSOLE:write-attribute(name=level,value=ALL)&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The plugin configuration extract used to set the CLI script to be executed:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&amp;lt;configuration&amp;gt;
+  ...
+  &amp;lt;cli-sessions&amp;gt;
+    &amp;lt;cli-session&amp;gt;
+      &amp;lt;script-files&amp;gt;
+        &amp;lt;script&amp;gt;scripts/logging.cli&amp;lt;/script&amp;gt;
+      &amp;lt;/script-files&amp;gt;
+    &amp;lt;/cli-session&amp;gt;
+  &amp;lt;/cli-sessions&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The &lt;a href=&quot;https://github.com/wildfly-extras/wildfly-jar-maven-plugin/tree/2.0.0.Final/examples/logging&quot;&gt;logging example&lt;/a&gt;
+shows how to configure the logging subsystem using WildFly CLI.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect2&quot;&gt;
+&lt;h3 id=&quot;packaging-extra-content&quot;&gt;Packaging extra content&lt;/h3&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Sometime you need to package content along with the server (e.g.: a keystore, some properties files).
+The server packaged inside a bootable JAR uses the exact same
+file system layout as a WildFly installation. The plugin allows you to specify a directory
+(layout similar to a WildFly home directory) that gets copied into the packaged server.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;For example, to copy &lt;code&gt;&lt;code&gt;mykeystore.jks&lt;/code&gt;&lt;/code&gt; to the &lt;code&gt;&lt;code&gt;standalone/configuration&lt;/code&gt;&lt;/code&gt;
+directory, create the directory &lt;code&gt;&lt;code&gt;&amp;lt;project base dir&amp;gt;/my-custom-content&lt;/code&gt;&lt;/code&gt;
+that contains &lt;code&gt;&lt;code&gt;standalone/configuration/mykeystore.jks&lt;/code&gt;&lt;/code&gt; and reference it
+from the plugin configuration. For example:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&amp;lt;configuration&amp;gt;
+  ...
+  &amp;lt;extra-server-content-dirs&amp;gt;
+    &amp;lt;extra-content&amp;gt;my-custom-content&amp;lt;/extra-content&amp;gt;
+  &amp;lt;/extra-server-content-dirs&amp;gt;
+&amp;lt;/configuration&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The &lt;a href=&quot;https://github.com/wildfly-extras/wildfly-jar-maven-plugin/tree/2.0.0.Final/examples/https&quot;&gt;https example&lt;/a&gt;
+shows how to package extra content.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;testing-with-arquillian&quot;&gt;Testing with Arquillian&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/wildfly/wildfly-arquillian&quot;&gt;WildFly Arquillian&lt;/a&gt; 3.0 contains support for a WildFly bootable JAR
+allowing you to test deployments with Arquillian.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The &lt;code&gt;&lt;code&gt;org.wildfly.arquillian:wildfly-arquillian-container-bootable&lt;/code&gt;&lt;/code&gt; adapter for arquillian supports:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Execution of tests that run as a client against a running bootable JAR.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Execution of tests that run inside a running bootable JAR but with some limitations.
+The bootable JAR to test must be a Hollow JAR (a JAR that doesn&amp;#8217;t contain any deployment).
+There is no support yet to repackage an existing deployment to contain the classes of the deployment created by the test.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The &lt;a href=&quot;https://github.com/wildfly-extras/wildfly-jar-maven-plugin/tree/2.0.0.Final/examples/arquillian&quot;&gt;arquillian examples&lt;/a&gt; show how to
+use WildFly arquilian to test deployments running inside a bootable JAR.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;to-conclude&quot;&gt;To conclude&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;We hope that you are seeing an interest in this new WildFly application packaging;
+keep us posted with your feedback and new requirements (that you can log as new
+&lt;a href=&quot;https://github.com/wildfly-extras/wildfly-jar-maven-plugin/issues&quot;&gt;project issues&lt;/a&gt;).&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Thank-you.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;JF Denise&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</content>
+      
+
+      
+      
+      
+      
+      
+
+      <author>
+        <name>Jean-François Denise</name>
+        
+        
+      </author>
+
+      
+        
+      
+
+      
+        <category term="wildfly" />
+      
+        <category term="galleon" />
+      
+        <category term="bootable" />
+      
+        <category term="jar" />
+      
+        <category term="bootable-jar" />
+      
+
+      
+        <summary type="html">As we introduced few months ago, we have been working on a &quot;Fat JAR&quot; packaging for WildFly. We are pleased to announce that the 2.0.0 Final version of the WildFly bootable JAR Maven plugin has been released.</summary>
+      
+
+      
+      
+    </entry>
+  
+    <entry>
+      <title type="html">WildFly 21 is released!</title>
+      <link href="https://wildfly.org//news/2020/10/13/WildFly21-Final-Released/" rel="alternate" type="text/html" title="WildFly 21 is released!" />
+      <published>2020-10-13T00:00:00+00:00</published>
+      <updated>2020-10-13T00:00:00+00:00</updated>
+      <id>https://wildfly.org//news/2020/10/13/WildFly21-Final-Released</id>
+      
+      
+        <content type="html" xml:base="https://wildfly.org//news/2020/10/13/WildFly21-Final-Released/">&lt;div id=&quot;preamble&quot;&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;I&amp;#8217;m excited to announce that the WildFly 21 Final zip is now available &lt;a href=&quot;https://wildfly.org/downloads&quot;&gt;for download&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;bootable-jar-galleon-layers&quot;&gt;Bootable JAR / Galleon Layers&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The biggest thing in WildFly 21 is Jean-Francois Denise and the team have added GA-level support for the &lt;a href=&quot;https://github.com/wildfly/wildfly-proposals/blob/master/bootable-jar/WFLY-13305_Bootable_Jar.adoc&quot;&gt;Bootable JAR&lt;/a&gt; feature that we&amp;#8217;ve been &lt;a href=&quot;https://www.wildfly.org/news/2020/06/18/Bootable-jar-Wildfly-20/&quot;&gt;working on over the last two releases&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The bootable jar feature allows you to add a &lt;a href=&quot;https://repository.jboss.org/org/wildfly/plugins/wildfly-jar-maven-plugin/2.0.0.Final&quot;&gt;maven plugin&lt;/a&gt; to your application&amp;#8217;s pom and have your build package your application deployment and the WildFly server needed to run it inside a single executable jar file. Running your application can be as simple as &lt;code&gt;java -jar my-application.jar&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;A bootable jar can be particularly useful for cloud deployment use cases. For example, you can use the JKube maven plugin to &lt;a href=&quot;https://github.com/wildfly-extras/wildfly-jar-maven-plugin/tree/2.0.0.Final/examples/jkube&quot;&gt;build and deploy your application on OpenShift&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;You can learn more about bootable jars in our new &lt;a href=&quot;https://docs.wildfly.org/21/Bootable_Guide.html&quot;&gt;Bootable JAR Guide&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;To get the most benefit from a bootable jar, you&amp;#8217;ll want to customize the WildFly server in it provide only the functionality you need, while leaving out configuration and binaries that are not relevant. To support this kind of customization, the bootable jar maven plugin lets you &lt;a href=&quot;https://docs.wildfly.org/21/Bootable_Guide.html#wildfly-jar-maven-plugin-galleon-configuration&quot;&gt;specify a list of names of the WildFly functionality you&amp;#8217;d like&lt;/a&gt;. Each of those names identifies one of the &lt;a href=&quot;https://docs.wildfly.org/galleon/#_layers&quot;&gt;Galleon layers&lt;/a&gt; that WildFly provides.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;To help ensure your experience with bootable jars is a good one, in WildFly 21 we greatly expanded the &lt;a href=&quot;https://docs.wildfly.org/21/Bootable_Guide.html#wildfly_layers&quot;&gt;list of Galleon layers we provide&lt;/a&gt;. New in 21 are:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;batch-jberet&lt;/code&gt;&amp;#8201;&amp;#8212;&amp;#8201;Support for Jakarta Batch.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;ejb&lt;/code&gt;&amp;#8201;&amp;#8212;&amp;#8201;Support for Jakarta Enterprise Beans, excluding the IIOP protocol.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;ejb-dist-cache&lt;/code&gt;&amp;#8201;&amp;#8212;&amp;#8201;Infinispan-based distributed caching for stateful session beans. An alternative to the default local caching.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;ejb-lite&lt;/code&gt;&amp;#8201;&amp;#8212;&amp;#8201;Support for Jakarta Enterprise Beans Lite.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;ejb-local-cache&lt;/code&gt;&amp;#8201;&amp;#8212;&amp;#8201;Infinispan-based local caching for stateful session beans. An alternative to distributed caching.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;jdr&lt;/code&gt;&amp;#8201;&amp;#8212;&amp;#8201;Support for the JBoss Diagnostic Reporting (JDR) subsystem.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;jsf&lt;/code&gt;&amp;#8201;&amp;#8212;&amp;#8201;Support for Jakarta Server Faces.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;jsonb&lt;/code&gt;&amp;#8201;&amp;#8212;&amp;#8201;Support for Jakarta JSON Binding.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;jsonp&lt;/code&gt;&amp;#8201;&amp;#8212;&amp;#8201;Support for Jakarta JSON Processing.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;mail&lt;/code&gt;&amp;#8201;&amp;#8212;&amp;#8201;Support for Jakarta Mail.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;messaging-activemq&lt;/code&gt;&amp;#8201;&amp;#8212;&amp;#8201;Support for connections to a remote Jakarta Messaging Service broker.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;microprofile-platform&lt;/code&gt;&amp;#8201;&amp;#8212;&amp;#8201;Support for all available Eclipse MicroProfile platform specifications.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;pojo&lt;/code&gt;&amp;#8201;&amp;#8212;&amp;#8201;Support for legacy JBoss Microcontainer applications.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;remote-activemq&lt;/code&gt;&amp;#8201;&amp;#8212;&amp;#8201;Support for connections to a remote Apache Activemq Artemis JMS broker.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;sar&lt;/code&gt;&amp;#8201;&amp;#8212;&amp;#8201;Support for SAR archives to deploy MBeans.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;webservices&lt;/code&gt;&amp;#8201;&amp;#8212;&amp;#8201;Support for Jakarta XML Web Services&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;web-console&lt;/code&gt;&amp;#8201;&amp;#8212;&amp;#8201;Support for loading the HAL web console from the /console context on the HTTP management interface.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;More details along with the &lt;a href=&quot;https://docs.wildfly.org/21/Bootable_Guide.html#wildfly_layers&quot;&gt;full set of layers WildFly provides&lt;/a&gt; is available in the bootable jar documentation.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;There are now a variety of ways use WildFly: by unzipping the traditional server zip, by &lt;a href=&quot;https://docs.wildfly.org/21/Galleon_Guide.html&quot;&gt;provisioning a customized WildFly instance&lt;/a&gt; using the Galleon CLI tool, and by building a running a bootable jar. We&amp;#8217;ve added a brief &lt;a href=&quot;https://docs.wildfly.org/21/Installation_Guide.html&quot;&gt;Installation Guide&lt;/a&gt; to help you decide which approach best fits your needs.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Many thanks to Tomask Adamski, Tommaso Borgato, Yeray Borges, Fabio Burzigotti, Jean-Francois Denise, Vladimir Dousodil, Cheng Fang, Darragh Fitzmaurice, Emmanuel Hugonnet, Rado Husar, Bob Johnson, Jan Kasik, Darran Lofthouse, Jim Ma, Roberto Oliveira and James Perkins for all of your hard work on this this summer.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;But, of course, we weren&amp;#8217;t entirely focused on bootable jar and Galleon! So, what else is new?&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;other-enhancements&quot;&gt;Other Enhancements&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;sect2&quot;&gt;
+&lt;h3 id=&quot;security&quot;&gt;Security&lt;/h3&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Once again, the folks working on security have brought us some new toys:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;A RESTEasy client can now &lt;a href=&quot;https://github.com/wildfly/wildfly-proposals/blob/master/elytron/WFLY-11868_RESTEasy_client_integration_with_Elytron.adoc&quot;&gt;make use of Elytron’s configuration on the client side of a REST deployment&lt;/a&gt; to use credentials, bearer tokens and SSLContexts. For this to happen, the Elytron client artifacts must be present on the classpath during the build of RESTEasy client.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Users are now able to configure Elytron to &lt;a href=&quot;https://github.com/wildfly/wildfly-proposals/blob/master/elytron/ELY-1921-http-external-mechanism.adoc&quot;&gt;use credentials established externally from the server&lt;/a&gt; to authenticate the client with HTTP. This will allow users to propagate authentication from mod-cluster/ajp to WildFly.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Two new kinds of Elytron security realms have been added:&lt;/p&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;A &lt;a href=&quot;https://github.com/wildfly/wildfly-proposals/blob/master/elytron/WFCORE-4486-multiple-security-realms-failover.adoc&quot;&gt;failover-realm&lt;/a&gt; is a security realm wrapper containing a delegate and a failover realm. If the delegate throws a RealmUnavailableException during identity lookup, it will be caught and failover realm will be used instead.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;A &lt;a href=&quot;https://github.com/wildfly/wildfly-proposals/blob/master/elytron/WFCORE-4485-multiple-security-realms-distributed-identities.adoc&quot;&gt;distributed-realm&lt;/a&gt; is a security realm wrapper containing a list of other security realms allowing the server to sequentially invoke them until one succeeds.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;It is now possible to &lt;a href=&quot;https://github.com/wildfly/wildfly-proposals/blob/master/elytron/WFCORE-4842-tls-1.3-with-openssl.adoc&quot;&gt;use TLS 1.3 with WildFly when using the OpenSSL TLS provider with Elytron&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect2&quot;&gt;
+&lt;h3 id=&quot;ejb&quot;&gt;EJB&lt;/h3&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;EJB invocations over the HTTP protocol can now be &lt;a href=&quot;https://github.com/wildfly/wildfly-proposals/blob/master/ejb/WFLY-12190-http-server-to-server-config.adoc&quot;&gt;used in server-to-server configurations&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;The EJB client protocol allows for compression of the invocation message and the open-session message payload. Configuration of such compression &lt;a href=&quot;https://github.com/wildfly/wildfly-proposals/blob/master/ejb/WFLY-13090-Enable-compression-on-remoting-globally-for-EJB-calls.adoc&quot;&gt;can now be configured globally&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect2&quot;&gt;
+&lt;h3 id=&quot;managing-wildfly&quot;&gt;Managing WildFly&lt;/h3&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;WildFly&amp;#8217;s MicroProfile Health implementation now includes &lt;a href=&quot;https://github.com/wildfly/wildfly-proposals/blob/master/microprofile/WFLY-12342_server_readiness_probes.adoc&quot;&gt;three vendor-specific checks&lt;/a&gt; as part of server readiness checking. These check the management kernel&amp;#8217;s view of the overall server status and the status of all deployments, and that the server booted without errors.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;In the standalone.conf(.bat|.ps1) script configuration file you can now &lt;a href=&quot;https://github.com/wildfly/wildfly-proposals/blob/master/core/WFCORE-4748-expose-module-options.adoc&quot;&gt;add a MODULE_OPTS=-javaagent:my-agent.jar environment variable&lt;/a&gt;. This allows you to take advantage of JBoss Modules' &lt;a href=&quot;https://issues.redhat.com/browse/MODULES-393&quot;&gt;ability to run as a java agent invoke other agents&lt;/a&gt;. Taking advantage of this is useful for occasions when previously the log manager was required on the boot class path.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;WildFly users can use a Git repository to manage their configuration file history of their standalone server. While previously it was only possible to establish a connection with HTTP authentication, it is now possible to &lt;a href=&quot;https://github.com/wildfly/wildfly-proposals/blob/master/elytron/WFCORE-4484-ssh-authentication-git-persistence.adoc&quot;&gt;establish a connection with SSH authentication&lt;/a&gt; using an Elytron configuration file to specify the credentials to be used.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;standards-support&quot;&gt;Standards Support&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;WildFly 21.0.0 is a Jakarta EE 8 compatible implementation, with both the Full Platform and the Web Profile. Evidence supporting our certification is available &lt;a href=&quot;https://github.com/wildfly/certifications/blob/EE8/WildFly_21.0.0.Final/jakarta-full-platform.adoc#tck-results&quot;&gt;for the Full Platform&lt;/a&gt; and &lt;a href=&quot;https://github.com/wildfly/certifications/blob/EE8/WildFly_21.0.0.Final/jakarta-web-profile.adoc#tck-results&quot;&gt;for the Web Profile&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;WildFly 21 is also a compatible implementation of Java EE 8.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;WildFly 21 is also a compliant implementation of the Eclipse MicroProfile 3.3 platform specification.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;While we made a lot of progress on an &lt;a href=&quot;https://www.wildfly.org/news/2020/06/23/WildFly-and-Jakarta-EE-9/&quot;&gt;EE 9 compatible variant of WildFly&lt;/a&gt; during the WildFly 21 cycle, I chose not to include a variant of that as part of the WildFly 21 release. I would like to produce an alpha of that fairly early during the WildFly 22 development cycle.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;jdk-support&quot;&gt;JDK Support&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Our recommendation is that you run WildFly on the most recent long-term support JDK release, i.e. on JDK 11 for WildFly 21. While we do do some testing of WildFly on JDK 12 and 13, we do considerably more testing of WildFly itself on the LTS JDKs, and we make no attempt to ensure the projects producing the various libraries we integrate are testing their libraries on anything other than JDK 8 or 11.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;WildFly 21 also is heavily tested and runs well on Java 8. We plan to continue to support Java 8 at least through WildFly 22, and probably beyond.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;While we recommend using an LTS JDK release, I do believe WildFly runs well on JDK 13. By run well, I mean the main WildFly testsuite runs with no more than a few failures in areas not expected to be commonly used. We want developers who are trying to evaluate what a newer JVM means for their applications to be able to look to WildFly as a useful development platform. We do see a couple of test failures with JDK 13 when using the deprecated Picketlink subsystem and WS Trust.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Work to allow WildFly to run on JDK 14 and 15 is ongoing. We haven&amp;#8217;t had time to digest fully some of the package removals that came in JDK 14, particularly in the security area. We did make significant progress in this area during WildFly 21 development though. The biggest barrier we face is the deprecated legacy security implementation based on Picketbox cannot support JDK 14. We intend to remove support for that security implementation after WildFly 23 and to only provide Elytron-based security. A lot of behind-the-scenes work to make that possible got accomplished during the WildFly 21 cycle.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Please note that WildFly runs on Java 11 and later in classpath mode.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;documentation&quot;&gt;Documentation&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The WildFly 21 documentation is available at the &lt;a href=&quot;https://docs.wildfly.org/21/&quot;&gt;docs.wildfly.org site&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;As a reminder, starting with WildFly 19 we shifted the location of the auto-generated documentation of the appserver management API from the &lt;a href=&quot;https://wildscribe.github.io//&quot;&gt;wildscribe.github.io&lt;/a&gt; site to a make it part of the general documentation for a release. The WildFly 21 management API documentation is in the &lt;a href=&quot;https://docs.wildfly.org/21/wildscribe&quot;&gt;wildscribe section of the WildFly 21 docs&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;jira-release-notes&quot;&gt;Jira Release Notes&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The full list of issues resolved is available &lt;a href=&quot;https://issues.redhat.com/secure/ReleaseNote.jspa?projectId=12313721&amp;amp;version=12350472&quot;&gt;here&lt;/a&gt;. Issues resolved in the WildFly Core 13 releases included with WildFly 21 are available &lt;a href=&quot;https://issues.redhat.com/secure/ConfigureReport.jspa?versions=12346407&amp;amp;versions=12350978&amp;amp;sections=all&amp;amp;style=none&amp;amp;selectedProjectId=12315422&amp;amp;reportKey=org.jboss.labs.jira.plugin.release-notes-report-plugin%3Areleasenotes&amp;amp;atl_token=AQZJ-FV3A-N91S-UDEU_328111ac5ac4d21b0bc1e529abe5c9a759d57e55_lin&amp;amp;Next=Next&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;enjoy&quot;&gt;Enjoy!&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;We hope you enjoy WildFly 21.  Please give it a try, particularly the bootable jar features, and &lt;a href=&quot;https://groups.google.com/forum/#!forum/wildfly&quot;&gt;give us your feedback&lt;/a&gt;. But most important, please stay safe and well!&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</content>
+      
+
+      
+      
+      
+      
+      
+
+      <author>
+        <name>Brian Stansberry</name>
+        
+        
+      </author>
+
+      
+        
+      
+
+      
+        <category term="announcement" />
+      
+        <category term="release" />
+      
+        <category term="microprofile" />
+      
+
+      
+        <summary type="html">I&amp;#8217;m excited to announce that the WildFly 21 Final zip is now available for download.</summary>
+      
+
+      
+      
+    </entry>
+  
+    <entry>
+      <title type="html">Biased locking removed from Java - does it affect you ?</title>
+      <link href="https://wildfly.org//news/2020/09/30/biased-locking-help/" rel="alternate" type="text/html" title="Biased locking removed from Java - does it affect you ?" />
+      <published>2020-09-30T00:00:00+00:00</published>
+      <updated>2020-09-30T00:00:00+00:00</updated>
+      <id>https://wildfly.org//news/2020/09/30/biased-locking-help</id>
+      
+      
+        <content type="html" xml:base="https://wildfly.org//news/2020/09/30/biased-locking-help/">&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Last week we became aware that the OpenJDK team in Java 15 have disabled  &lt;strong&gt;biased locking&lt;/strong&gt; (&lt;a href=&quot;https://openjdk.java.net/jeps/374&quot;&gt;JEP 374&lt;/a&gt;)in the Java virtual machine. This is a change from previous versions and could &lt;strong&gt;potentially&lt;/strong&gt; have a negative impact on a Java application&amp;#8217;s performance.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Red Hat&amp;#8217;s own performance teams are currently running performance tests to see how it affects our Java middleware, but no amount of generic testing can reveal how this change affects real-world applications.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;That is where you come in.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;We would like to get info from you on whether your application performance is affected by biased locking or not.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;To do so please try the following in your application performance tests:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Run your WildFly application performance tests as you normally would with the following command line flags on Java 11 (jdk11u):&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;&lt;strong&gt;enabled&lt;/strong&gt;: -XX:+UseBiasedLocking -XX:BiasedLockingStartupDelay=0&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;&lt;strong&gt;disabled&lt;/strong&gt;: -XX:-UseBiasedLocking&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;We would like to know the result of this no matter if you see a regression or not on the same Java Virtual Machine.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;If you are accustomed to tuning WildFly&amp;#8217;s thread utilization then running your test with the following scenarios would be of great help too:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;olist arabic&quot;&gt;
+&lt;ol class=&quot;arabic&quot;&gt;
+&lt;li&gt;
+&lt;p&gt;thread count ~= hardware core count&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;thread count ~= N * hardware core count where 8 &amp;lt; N &amp;lt; 16&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The intent of these are to see how the level of concurrency affects the result.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The term 'thread count' can refer to a great many things in a WildFly context. For most EE apps that are primarily about handling HTTP requests the most relevant configuration area is the &lt;code&gt;io&lt;/code&gt; subsystem, particularly the &lt;code&gt;task-max-threads&lt;/code&gt; attribute in the &lt;a href=&quot;https://docs.wildfly.org/20/wildscribe/subsystem/io/worker/index.html&quot;&gt;IO subsystem&amp;#8217;s worker resource&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect2&quot;&gt;
+&lt;h3 id=&quot;reporting-the-result&quot;&gt;Reporting the result&lt;/h3&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Please open a bug on &lt;a href=&quot;https://issues.redhat.com/projects/WFLY&quot;&gt;the WildFly JIRA&lt;/a&gt; with &lt;code&gt;[jep374]&lt;/code&gt; in the title + your project. e.g. &lt;code&gt;[jep374] results for acme project crazy panda&lt;/code&gt; containing the following information per run in the description:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;jvm used: jdk11
+hardward-core count: N (if you know)
+thread configuration information: io subsystem config block from your server config or other relevant threading configuration (if you can)
+performance test result: with biased locking
+performance test result: without biased locking&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;This will help us immensely. Thank you!&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;background&quot;&gt;Background&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Below is some background context on biased locking - all optional reading - you don&amp;#8217;t need to understand the details to help us by running your performance tests and let us know if anything changes.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect2&quot;&gt;
+&lt;h3 id=&quot;what-is-biased-locking&quot;&gt;What is biased locking?&lt;/h3&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Biased locking lowers the cost of &lt;em&gt;uncontended&lt;/em&gt; synchronization.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;&lt;strong&gt;Without biased locking&lt;/strong&gt;: a thread needs to set and clear a lock bit when it performs repeated synchronizations on the same object. It also needs to wait for those set/clear writes to be drained to local cache before proceeding to execute further memory operations.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;&lt;strong&gt;With biased locking&lt;/strong&gt;: the first time a thread synchronizes on an object it does a bit more work to acquire synchronized ('bias' it to the thread). Subsequent syncrhonizations proceed via a simple read test with no need to drain to cache.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Where&amp;#8217;s the trade off? Well, if a biased lock is contended then there is more work to do to bias and unbias the lock. However, it is known that many synchronized operations are uncontended.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Biasing can be a big win when a potentially concurrent data structure is actually used sequentially. The case where it helps most is exemplified in the problem we already found in class &lt;code&gt;DataOutputStream&lt;/code&gt;. Normally only one thread writes a &lt;code&gt;DataOutputStream&lt;/code&gt; and it is often not read until the stream has been filled. All the same, every &lt;code&gt;putInt&lt;/code&gt; or &lt;code&gt;putLong&lt;/code&gt; call invokes a syncrhonized method to increment the byte count by 4 or 8. That&amp;#8217;s needed just in case some other thread might want to reliably locate the end of the valid buffer data but that rarely happens. So, the unbiased case suffers lock write and cache drain delays at every basic put operation.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;A similar case occurs with class &lt;code&gt;ByteOutputStream&lt;/code&gt;. The method &lt;code&gt;putByte&lt;/code&gt; is synchronized. So writing a single byte involves a lock and unlock. Note that method &lt;code&gt;putInt&lt;/code&gt; calls &lt;code&gt;putByte&lt;/code&gt; 4 times, requiring 4 locks and unlocks. Method &lt;code&gt;putLong&lt;/code&gt; calls it 8 times!&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;why-is-biased-locking-being-removed&quot;&gt;Why is biased locking being removed?&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The implementation of biased locking adds a great deal of complexity to the JVM and is understood by only a small subset of the most experienced engineers. The cost of maintaining it and designing around it is significantly slowing down progress on new features. It has been a long term goal to remove it if at all possible. Some OpenJDK contributors wanted to remove it
+right away in JDK 15 while others argued for a slower deprecation route in order to check that we could really dispense with it.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;what-happens-next&quot;&gt;What happens next?&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;We are collecting our own internal performance tests across multiple teams in Red Hat and will gather data from community reported tests too and see what the data indicates. At this stage we are making no assumption that the removal of biased locking will definitely make performance worse. We know that in some cases not having biased locks will improve performance. Our concern is to find cases, like the JDK examples above, where it might cause serious performance degradation and get an idea of how bad, and also how common, the worst cases might be.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Once processed we might reach out to those reporting scenarios with unexpected results and get more details.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Then we&amp;#8217;ll work with the larger OpenJDK community to aid in deciding if biased locking can be turned off completely or a longer graceful deprecation period is needed.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;In any case - Thank you for your help and interest in making Java better!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;My thanks to Max Andersen from whose &lt;a href=&quot;https://quarkus.io/blog/biased-locking-help/&quot;&gt;post on quarkus.io&lt;/a&gt; most of the content here was shamelessly copied!&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</content>
+      
+
+      
+      
+      
+      
+      
+
+      <author>
+        <name>Brian Stansberry</name>
+        
+        
+      </author>
+
+      
+        
+      
+
+      
+        <category term="help" />
+      
+
+      
+        <summary type="html">Last week we became aware that the OpenJDK team in Java 15 have disabled biased locking (JEP 374)in the Java virtual machine. This is a change from previous versions and could potentially have a negative impact on a Java application&amp;#8217;s performance.</summary>
+      
+
+      
+      
+    </entry>
+  
+    <entry>
+      <title type="html">Introducing the WildFly MicroProfile GraphQL Feature Pack</title>
+      <link href="https://wildfly.org//news/2020/08/13/Introducing-the-WildFly-GraphQL-feature-pack/" rel="alternate" type="text/html" title="Introducing the WildFly MicroProfile GraphQL Feature Pack" />
+      <published>2020-08-13T00:00:00+00:00</published>
+      <updated>2020-08-13T00:00:00+00:00</updated>
+      <id>https://wildfly.org//news/2020/08/13/Introducing-the-WildFly-GraphQL-feature-pack</id>
+      
+      
+        <content type="html" xml:base="https://wildfly.org//news/2020/08/13/Introducing-the-WildFly-GraphQL-feature-pack/">&lt;div id=&quot;preamble&quot;&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;I am pleased to announce the 1.0.0.Beta1 release of the MicroProfile GraphQL feature
+pack for WildFly. It offers experimental support for the MicroProfile GraphQL 1.0 specification, implemented
+by SmallRye GraphQL.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/eclipse/microprofile-graphql&quot;&gt;MicroProfile GraphQL&lt;/a&gt; - link to the specification.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/smallrye/smallrye-graphql&quot;&gt;SmallRye GraphQL&lt;/a&gt; - link to the underlying implementation.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The source code for the feature pack can be found on &lt;a href=&quot;https://github.com/wildfly-extras/wildfly-graphql-feature-pack&quot;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;installing-the-feature-pack&quot;&gt;Installing the feature pack&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;For now, the GraphQL support is distributed as a feature pack rather than integrated into WildFly itself.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;To install the feature pack, &lt;a href=&quot;https://github.com/wildfly/galleon/releases&quot;&gt;download&lt;/a&gt; the latest version of Galleon. At the time of writing this is 4.2.5. Unzip it somewhere, and add its &lt;code&gt;bin/&lt;/code&gt; folder to your path.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Next, save a copy of
+&lt;a href=&quot;{projectlink}/provision.xml&quot;&gt;provision.xml&lt;/a&gt; somewhere, and go to that folder in a terminal window. Then run:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre&gt;$galleon.sh provision ./provision.xml --dir=my-wildfly&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;This will take some time the first time you do it since it will download a lot of dependencies
+from Maven. Once that is done, subsequent attempts will be fast.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;What this command does is:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;ulist&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Provision a slimmed version (compared to the full download) of WildFly containing the relevant
+parts for a server running in the cloud. The main &lt;a href=&quot;{projectlink}/README.md&quot;&gt;README&lt;/a&gt; of the project repository contains more information about this part. You can adjust this file to choose
+other parts of the server you may be interested in.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Next it provisions the full contents of the feature pack into our new server instance.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;The provisioned server will be output in the &lt;code&gt;my-wildfly&lt;/code&gt; subdirectory, and can be started via the usual &lt;code&gt;my-wildfly/bin/standalone.sh&lt;/code&gt; command.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;example&quot;&gt;Example&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;A very short example of what you can do with GraphQL is as follows. This is inspired by the quickstart (included in the
+GitHub repository containing the feature pack), so be sure to try it out!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Here we will just show you how to create an endpoint that returns data from a database of Star Wars films, namely just the operation
+that retrieves information about all films in the database:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre&gt;@GraphQLApi
+public class FilmResource {
+
+    @Inject
+    GalaxyService service;
+
+    @Query(&quot;allFilms&quot;)
+    @Description(&quot;Get all Films from a galaxy far far away&quot;)
+    public List&amp;lt;Film&amp;gt; getAllFilms() {
+        return service.getAllFilms();
+    }
+}&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The &lt;code&gt;Film&lt;/code&gt; class is just a regular JavaBean (getters and setters omitted for brevity):&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre&gt;public class Film {
+    private String title;
+    private Integer episodeID;
+    private String director;
+    private LocalDate releaseDate;
+}&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;In such case, if the GraphQL client calls the following query:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre&gt;query allFilms {
+  allFilms {
+    title
+    releaseDate
+  }
+}&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The client will get back the requested data about all the films in the database (in our case, we only included episodes 4, 5 and 6!):&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;listingblock&quot;&gt;
+&lt;div class=&quot;content&quot;&gt;
+&lt;pre&gt;{
+  &quot;data&quot;: {
+    &quot;allFilms&quot;: [
+      {
+        &quot;title&quot;: &quot;A New Hope&quot;,
+        &quot;releaseDate&quot;: &quot;1977-05-25&quot;
+      },
+      {
+        &quot;title&quot;: &quot;The Empire Strikes Back&quot;,
+        &quot;releaseDate&quot;: &quot;1980-05-21&quot;
+      },
+      {
+        &quot;title&quot;: &quot;Return Of The Jedi&quot;,
+        &quot;releaseDate&quot;: &quot;1983-05-25&quot;
+      }
+    ]
+  }
+}&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;sect1&quot;&gt;
+&lt;h2 id=&quot;feedback&quot;&gt;Feedback&lt;/h2&gt;
+&lt;div class=&quot;sectionbody&quot;&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;We&amp;#8217;re keen to hear your feedback! Please raise any issues found at &lt;a href=&quot;https://github.com/wildfly-extras/wildfly-graphql-feature-pack/issues&quot; class=&quot;bare&quot;&gt;https://github.com/wildfly-extras/wildfly-graphql-feature-pack/issues&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</content>
+      
+
+      
+      
+      
+      
+      
+
+      <author>
+        <name>Jan Martiska</name>
+        
+        
+      </author>
+
+      
+        
+      
+
+      
+        <category term="wildfly" />
+      
+        <category term="galleon" />
+      
+        <category term="microprofile" />
+      
+        <category term="graphql" />
+      
+        <category term="smallrye" />
+      
+
+      
+        <summary type="html">I am pleased to announce the 1.0.0.Beta1 release of the MicroProfile GraphQL feature pack for WildFly. It offers experimental support for the MicroProfile GraphQL 1.0 specification, implemented by SmallRye GraphQL.</summary>
+      
+
+      
+      
+    </entry>
+  
+    <entry>
+      <title type="html">WildFly 20.0.1 is released!</title>
+      <link href="https://wildfly.org//news/2020/07/07/WildFly2001-Released/" rel="alternate" type="text/html" title="WildFly 20.0.1 is released!" />
+      <published>2020-07-07T00:00:00+00:00</published>
+      <updated>2020-07-07T00:00:00+00:00</updated>
+      <id>https://wildfly.org//news/2020/07/07/WildFly2001-Released</id>
+      
+      
+        <content type="html" xml:base="https://wildfly.org//news/2020/07/07/WildFly2001-Released/">&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;WildFly 20.0.1.Final is now available &lt;a href=&quot;{base_url}/downloads&quot;&gt;for download&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;It&amp;#8217;s been about a month since the WildFly 20 release, so it&amp;#8217;s time for a small bug fix update, WildFly 20.0.1.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;The full list of issues resolved in WildFly 20.0.1 is available &lt;a href=&quot;https://issues.redhat.com/secure/ReleaseNote.jspa?projectId=12313721&amp;amp;version=12346151&quot;&gt;here&lt;/a&gt;. Issues resolved in the WildFly Core 12.0.2 and 12.0.3 releases included with WildFly 20.0.1 are available &lt;a href=&quot;https://issues.redhat.com/secure/ReleaseNote.jspa?projectId=12315422&amp;amp;version=12346092&quot;&gt;here&lt;/a&gt; and &lt;a href=&quot;https://issues.redhat.com/secure/ReleaseNote.jspa?projectId=12315422&amp;amp;version=12346603&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Onward to WildFly 21!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&quot;paragraph&quot;&gt;
+&lt;p&gt;Enjoy.&lt;/p&gt;
+&lt;/div&gt;</content>
+      
+
+      
+      
+      
+      
+      
+
+      <author>
+        <name>Brian Stansberry</name>
+        
+        
+      </author>
+
+      
+        
+      
+
+      
+        <category term="announcement" />
+      
+        <category term="release" />
+      
+
+      
+        <summary type="html">WildFly 20.0.1.Final is now available for download.</summary>
+      
+
+      
+      
+    </entry>
+  
+
+</feed>
+
